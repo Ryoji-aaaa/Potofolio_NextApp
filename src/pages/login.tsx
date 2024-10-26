@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import InfoBox from "@/components/InfoBox";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -49,6 +51,11 @@ const Login = () => {
   };
   return (
     <>
+      <InfoBox mode="hint">
+        <p>Guest ユーザーでログインする場合は、</p>
+        <p>メールアドレス:abc@example.com</p>
+        <p>パスワード:password123</p>
+      </InfoBox>
       <form onSubmit={submitHandler}>
         <label htmlFor="email">メールアドレス</label>
         <input
@@ -69,6 +76,17 @@ const Login = () => {
         {error && <div>{error}</div>}
         <button type="submit">ログイン</button>
       </form>
+      <p>
+        アカウントをお持ちでない方は
+        <button
+          className="underlineURL"
+          onClick={() => {
+            router.push("/register");
+          }}
+        >
+          こちら
+        </button>
+      </p>
     </>
   );
 };
