@@ -23,9 +23,9 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
   }
   
-  header {
+  nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1.5rem;
     justify-content: center;
     align-items: center;
@@ -145,22 +145,6 @@ body {
   .infobox-warning.warning--high {
     border: 1px solid #f97373;
     color: #f97373;
-  }
-  
-  .devNavigation {
-    /*　遷移ページ列挙（開発用） */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    background-color: #6ddaff;
-    padding: 1rem;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
-    font-weight: bold;
-    font-size: inherit;
-    line-height: 1;
-    text-align: center;
   }
   
   .underlineURL {
