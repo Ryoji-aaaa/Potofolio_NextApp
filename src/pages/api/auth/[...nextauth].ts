@@ -1,47 +1,39 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { MongoClient } from 'mongodb';
+import bcrypt from 'bcryptjs';
+
+const clientPromise = new MongoClient(process.env.MONGODB_URI as string).connect();
 
 export default NextAuth({
-    providers: [
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                email: { label: "Email", type: "email", placeholder: "your-email@example.com" },
-                password: { label: "Password", type: "password" }
-            },
-            async authorize(credentials) {
-                const user = { id: "1", name: "User", email: credentials?.email };
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' }
+      },
+      async authorize(credentials) {
+        const client = await clientPromise;
+        const db = client.db('myFirstDatabase');
+        const usersCollection = db.collection('users');
 
-                // Here you should add your own logic to validate the credentials
-                // For example, you can check the credentials against a database
-                if (credentials?.email === "your-email@example.com" && credentials?.password === "your-password") {
-                    return user;
-                } else {
-                    return null;
-                }
-            }
-        })
-    ],
-    pages: {
-        signIn: '/auth/signin',
-        signOut: '/auth/signout',
-        error: '/auth/error', // Error code passed in query string as ?error=
-        verifyRequest: '/auth/verify-request', // (used for check email message)
-        newUser: null // If set, new users will be directed here on first sign in
-    },
-    callbacks: {
-        async jwt({ token, user }) {
-            if (user) {
-                token.id = user.id;
-            }
-            return token;
-        },
-        async session({ session, token }) {
-            if (token) {
-                session.id = token.id;
-            }
-            return session;
+        const user = await usersCollection.findOne({ email: credentials?.email });
+        if (!user) {
+          throw new Error('No user found with the email');
         }
-    },
-    secret: process.env.NEXTAUTH_SECRET,
+
+        const isValid = await bcrypt.compare(credentials!.password, user.password);
+        if (!isValid) {
+          throw new Error('Could not log you in');
+        }
+
+        return { id: user._id.toString(), email: user.email };
+      }
+    })
+  ],
+  session: {
+    strategy: 'jwt',
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 });
