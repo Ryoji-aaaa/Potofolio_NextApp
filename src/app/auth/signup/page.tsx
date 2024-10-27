@@ -29,7 +29,7 @@ export default function SignUpPage() {
         body: JSON.stringify(info),
       });
       if (res.ok) {
-        router.push('/auth/signin');
+        router.push("/auth/signin");
         setHint("user signup success");
       } else {
         const errorData = await res.json();
@@ -49,38 +49,51 @@ export default function SignUpPage() {
   // }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Sign Up</h1>
-      <input
-        type="text"
-        name="username"
-        onChange={(e) => handleInput(e)}
-        placeholder="Username"
-        required
-      />
-      <input
-        type="email"
-        name="email"
-        onChange={(e) => handleInput(e)}
-        placeholder="Email"
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        onChange={(e) => handleInput(e)}
-        placeholder="Password"
-        required
-      />
-      <button type="submit" disabled={pending ? true : false}>
-        {pending ? "processing":"Sign Up"}
-      </button>
-      {error && (
-        <InfoBox mode="error" severity="high">
-          {error}
-        </InfoBox>
-      )}
-      {hint && <InfoBox mode="hint">{hint}</InfoBox>}
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h1>アカウント登録</h1>
+        <input
+          type="text"
+          name="username"
+          onChange={(e) => handleInput(e)}
+          placeholder="Username"
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          onChange={(e) => handleInput(e)}
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          onChange={(e) => handleInput(e)}
+          placeholder="Password"
+          required
+        />
+        <button type="submit" disabled={pending ? true : false}>
+          {pending ? "processing" : "Sign Up"}
+        </button>
+        {error && (
+          <InfoBox mode="error" severity="high">
+            {error}
+          </InfoBox>
+        )}
+        {hint && <InfoBox mode="hint">{hint}</InfoBox>}
+      </form>
+      <p>
+        <span
+          className="underlineURL"
+          onClick={() => {
+            router.push("/auth/signin");
+          }}
+        >
+          ログイン画面
+        </span>
+        へ
+      </p>
+    </div>
   );
 }

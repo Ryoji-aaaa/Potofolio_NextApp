@@ -41,35 +41,48 @@ export default function SignInPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Sign In</h1>
-      <InfoBox mode="hint">
-        <p>Guest LoginのEmailとPassword</p>
-        <p>abc@example.com</p>
-        <p>password123</p>
-      </InfoBox>
-      <input
-        type="email"
-        name="email"
-        onChange={(e) => handleInput(e)}
-        placeholder="Email"
-        required
-      />
-      <input
-        type="password"
-        name="password"
-        onChange={(e) => handleInput(e)}
-        placeholder="Password"
-        required
-      />
-      <button type="submit" disabled={pending ? true : false}>
-        {pending ?"processing":"Sign In"}
-      </button>
-      {error && (
-        <InfoBox mode="error" severity="high">
-          {error}
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h1>ログイン画面</h1>
+        <InfoBox mode="hint">
+          <p>Guest LoginのEmailとPassword</p>
+          <p>abc@example.com</p>
+          <p>password123</p>
         </InfoBox>
-      )}
-    </form>
+        <input
+          type="email"
+          name="email"
+          onChange={(e) => handleInput(e)}
+          placeholder="Email"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          onChange={(e) => handleInput(e)}
+          placeholder="Password"
+          required
+        />
+        <button type="submit" disabled={pending ? true : false}>
+          {pending ? "processing" : "Sign In"}
+        </button>
+        {error && (
+          <InfoBox mode="error" severity="high">
+            {error}
+          </InfoBox>
+        )}
+      </form>
+      <p>
+        アカウントをお持ちでない方は
+        <span
+          className="underlineURL"
+          onClick={() => {
+            router.push("/auth/signup");
+          }}
+        >
+          こちら
+        </span>
+      </p>
+    </div>
   );
 }
