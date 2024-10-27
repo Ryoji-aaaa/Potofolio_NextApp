@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -54,8 +60,7 @@ body {
   input {
     margin: 1px;
     font: inherit;
-    width: 100%;
-    padding: 0.5rem;
+    width: 100%; 
     background-color: #b4b6c4;
     border: none;
     border-radius: 4px;
@@ -159,4 +164,3 @@ body {
     line-height: inherit;
     vertical-align: baseline;
   }
-  
