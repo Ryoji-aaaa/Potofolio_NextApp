@@ -1,32 +1,32 @@
-"use client";
-import "@/styles/globals.css";
-import Link from "next/link";
-import { Inter } from "next/font/google";
-import { SessionProvider as NextAuthProvider } from "next-auth/react";
+// app/layout.tsx
+import '../app/globals.css';
+import SessionProviderWrapper from '../app/SessionProviderWrapper'; 
+import type { ReactNode } from 'react';
+import Link from 'next/link';
 
-const inter = Inter({ subsets: ["latin"] });
+export const metadata = {
+  title: 'Authentication App',
+  description: 'A sample authentication app using Next.js, TypeScript, and MongoDB',
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
-  console.log(children);
   return (
-    <html lang="ja">
-      <head>
-        <title>My App</title>
-        <meta name="description" content="This is a sample Next.js app" />
-      </head>
-      <body className={inter.className}>
-        <nav>
-          <Link href="/login">Login</Link> |{" "}
-          <Link href="/register">Register</Link> |{" "}
-          <Link href="/mypage">My Page</Link>
-        </nav>
-        <main>
-          <NextAuthProvider>{children}</NextAuthProvider>
-        </main>
+    <html lang="en">
+      <body>
+        <SessionProviderWrapper>
+          <header>
+            <nav>
+              <Link href="/auth/signin">Sign In</Link>
+              <Link href="/auth/signup">Sign Up</Link>
+              <Link href="/mypage">My Page</Link>
+            </nav>
+          </header>
+          <main>{children}</main>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

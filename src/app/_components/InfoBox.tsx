@@ -6,7 +6,7 @@ type HintBoxProps = {
 };
 
 type WarningBoxProps = {
-  mode: "warning";
+  mode: "warning" | "error";
   severity: "high" | "medium" | "low";
   children: ReactNode;
 };
@@ -24,7 +24,7 @@ export default function InfoBox(props: InfoBoxProps) {
   const { severity } = props;
   return (
     <aside className={`infobox infobox-warning warning--${severity}`}>
-      <h2>Warning</h2>
+      {mode === "warning" ? <h2>Warning</h2> : "" }
       <div>{children}</div>
     </aside>
   );

@@ -1,62 +1,75 @@
-// app/auth/signin/page.tsx
 "use client";
+
 import InfoBox from "@/app/_components/InfoBox";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
-export default function SigninPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function SignInPage() {
+  const [info, setInfo] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
+    setInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    await signIn("credentials", {
-      redirect: true,
-      email,
-      password,
-      callbackUrl: "/",
-    });
+    // console.log({ info });
+    if (!info.email || !info.password) {
+      setError("Must provide all Credentials");
+      return;
+    }
+    try {
+      setPending(true);
+      const res = await signIn("credentials", {
+        email: info.email,
+        password: info.password,
+        redirect: false,
+      });
+      if (res?.ok) {
+        router.replace("/mypage");
+      } else {
+        setError("Sign in failed");
+      }
+    } catch (err) {
+      setError(("setPending[/singIn]:28 :" + err) as string);
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
+      <h1>Sign In</h1>
       <InfoBox mode="hint">
-        <p>Guest ユーザーでログインする場合は、</p>
-        <p>メールアドレス:abc@example.com</p>
-        <p>パスワード:password123</p>
+        <p>Guest LoginのEmailとPassword</p>
+        <p>abc@example.com</p>
+        <p>password123</p>
       </InfoBox>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email:{" "}
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </label>
-        <label>
-          Password:{" "}
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </label>
-        <button type="submit">Sign In</button>
-        <p>
-          アカウントをお持ちでない方は
-          <button
-            className="underlineURL"
-            onClick={() => {
-              router.push("/signup");
-            }}
-          >
-            こちら
-          </button>
-        </p>
-      </form>
-    </div>
+      <input
+        type="email"
+        name="email"
+        onChange={(e) => handleInput(e)}
+        placeholder="Email"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        onChange={(e) => handleInput(e)}
+        placeholder="Password"
+        required
+      />
+      <button type="submit" disabled={pending ? true : false}>
+        {pending ?"processing":"Sign In"}
+      </button>
+      {error && (
+        <InfoBox mode="error" severity="high">
+          {error}
+        </InfoBox>
+      )}
+    </form>
   );
 }

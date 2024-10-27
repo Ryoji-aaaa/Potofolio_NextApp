@@ -1,26 +1,28 @@
-// app/api/auth/signup/route.ts
 import { hash } from "bcryptjs";
-import clientPromise from "@/lib/ConnectDB";
 import { NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
+import UserModel from "@/lib/SchemaModels";
 
 export async function POST(request: Request) {
-  const { email, password } = await request.json();
-  
-  const client = await clientPromise;
-  const db = client.db("mydatabase");
-  const users = db.collection("users");
-
-  const existingUser = await users.findOne({ email });
-  if (existingUser) {
-    return NextResponse.json({ error: "User already exists" }, { status: 409 });
+  await connectDB();
+  const { username, email, password } = await request.json();
+  // console.log({ username, email, password });
+  const exists = await UserModel.exists({ $or: [{ email }, { username }] });
+  if (exists) {
+    return NextResponse.json(
+      { message: "Username or email already exists" },
+      { status: 500 }
+    );
   }
-
   const hashedPassword = await hash(password, 12);
-  await users.insertOne({
-    email,
-    password: hashedPassword,
-    createdAt: new Date(),
-  });
-
-  return NextResponse.json({ message: "User created successfully" }, { status: 201 });
+  await UserModel.create({ username, email, password: hashedPassword });
+  return NextResponse.json({ message: "User created" }, { status: 201 });
+  // try {
+  // } catch (err) {
+  //   console.log("Error while signup connectiong.", err);
+  //   return NextResponse.json(
+  //     { message: "Error while signup" },
+  //     { status: 500 }
+  //   );
+  // }
 }

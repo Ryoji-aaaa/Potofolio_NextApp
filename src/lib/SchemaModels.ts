@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
+import { Schema, model, models } from 'mongoose';
 
-const Schema = mongoose.Schema;
-const UserSchema = new Schema({
+const userSchema = new Schema({
   username: {
     type: String,
-    required: true,
+    required: [true, "Username is required"],
+    unique: [true, "Username is unique"],
   },
   email: {
     type: String,
-    required: true,
-    unique: true,
+    required: [true, "Email is required"],
+    unique: [true, "Email is unique"],
   },
   password: {
     type: String,
@@ -17,5 +17,6 @@ const UserSchema = new Schema({
   },
 });
 
-export const UserModel =
-  mongoose.models.User || mongoose.model("User", UserSchema);
+// モデルを作成し、エクスポートします
+const UserModel = models.User || model('User', userSchema);
+export default UserModel;

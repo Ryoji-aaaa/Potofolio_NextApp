@@ -1,54 +1,82 @@
 // app/api/auth/[...nextauth]/route.ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import connectDB from "@/lib/mongodb";
 import { compare } from "bcryptjs";
-import clientPromise from "@/lib/ConnectDB";
+import UserModel from "@/lib/SchemaModels";
+
+interface Credentials {
+  email: string;
+  password: string;
+}
+
+interface User {
+  id: string;
+  email: string;
+  username: string;
+}
+
+const authorize = async (credentials: Credentials | undefined): Promise<User | null> => {
+  if (!credentials) {
+    console.log("No credentials provided");
+    return null;
+  }
+
+  await connectDB();
+  const user = await UserModel.findOne({ email: credentials.email });
+
+  if (!user) {
+    console.log("User not found");
+    return null;
+  }
+
+  const isValidPassword = await compare(credentials.password, user.password);
+  if (!isValidPassword) {
+    console.log("Invalid password");
+    return null;
+  }
+
+  console.log("User authenticated successfully");
+  return { id: user._id.toString(), email: user.email, username: user.username };
+};
 
 const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "your-email@example.com",
+        },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        const client = await clientPromise;
-        const db = client.db("mydatabase");
-        const users = db.collection("users");
-
-        const user = await users.findOne({ email: credentials?.email });
-        if (!user) {
-          throw new Error("Invalid email or password");
-        }
-
-        const isValid = await compare(credentials!.password, user.password);
-        if (!isValid) {
-          throw new Error("Invalid email or password");
-        }
-
-        return { id: user._id.toString(), email: user.email };
-      },
+      authorize,
     }),
   ],
-  session: {
-    strategy: "jwt" as "jwt",
-  },
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/signin",
+    signOut: "/auth/signin",
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.id = user.id;
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.username = user.username;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (token) session.user.id = token.id;
+      session.user.id = token.id;
+      session.user.email = token.email;
+      session.user.username = token.username;
       return session;
     },
   },
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
