@@ -1,5 +1,5 @@
 "use client";
-import InfoBox from "@/app/_components/InfoBox";
+import InfoBox from "@/app/components/InfoBox";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

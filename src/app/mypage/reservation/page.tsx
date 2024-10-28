@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import ReserveCalendar from "@/app/_components/ReserveCalendar";
+import ReserveCalendar from "@/app/components/ReserveCalendar";
 
 export default function ReservationPage() {
   const { data: session } = useSession();

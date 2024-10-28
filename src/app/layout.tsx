@@ -1,6 +1,6 @@
 // app/layout.tsx
 import "../app/globals.css";
-import SessionProviderWrapper from "./_components/SessionProviderWrapper";
+import SessionProviderWrapper from "./components/SessionProviderWrapper";
 import { type ReactNode } from "react";
 import type { Metadata } from "next";
 // import localFont from "next/font/local";

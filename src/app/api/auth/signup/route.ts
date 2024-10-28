@@ -1,7 +1,7 @@
 import { hash } from "bcryptjs";
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import UserModel from "@/lib/SchemaModels";
+import UserModel from "@/lib/UserModels";
 
 export async function POST(request: Request) {
   await connectDB();

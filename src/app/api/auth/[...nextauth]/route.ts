@@ -3,7 +3,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "@/lib/mongodb";
 import { compare } from "bcryptjs";
-import UserModel from "@/lib/SchemaModels";
+import UserModel from "@/lib/UserModels";
 
 interface Credentials {
   email: string;

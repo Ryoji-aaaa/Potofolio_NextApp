@@ -1,7 +1,7 @@
 // app/mypage/layout.tsx
 "use client";
 import React, { useEffect } from 'react';
-import Sidebar from "@/app/_components/Sidebar";
+import Sidebar from "@/app/components/Sidebar";
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
