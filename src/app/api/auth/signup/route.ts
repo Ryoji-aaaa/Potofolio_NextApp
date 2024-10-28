@@ -17,12 +17,4 @@ export async function POST(request: Request) {
   const hashedPassword = await hash(password, 12);
   await UserModel.create({ username, email, password: hashedPassword });
   return NextResponse.json({ message: "User created" }, { status: 201 });
-  // try {
-  // } catch (err) {
-  //   console.log("Error while signup connectiong.", err);
-  //   return NextResponse.json(
-  //     { message: "Error while signup" },
-  //     { status: 500 }
-  //   );
-  // }
 }
