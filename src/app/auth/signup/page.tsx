@@ -1,8 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import InfoBox from "@/app/_components/InfoBox";
+import InfoBox from "@/app/components/InfoBox";
 import { ChangeEvent, useState } from "react";
-// import { useRouter } from 'next/navigation';
+// import { useRouter } from "next/navigation";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -43,9 +43,9 @@ export default function SignUpPage() {
   };
 
   // if (res.ok) {
-  //   router.push('/auth/signin');
+  //   router.push("/auth/signin");
   // } else {
-  //   alert('Sign up failed');
+  //   alert("Sign up failed");
   // }
 
   return (

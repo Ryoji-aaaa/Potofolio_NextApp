@@ -1,6 +1,6 @@
 "use client";
 
-import InfoBox from "@/app/_components/InfoBox";
+import InfoBox from "@/app/components/InfoBox";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";

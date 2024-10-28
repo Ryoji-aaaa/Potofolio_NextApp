@@ -1,117 +1,85 @@
-// src/app/components/ReserveCalendar.tsx
+"use client";
+
 import { useSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 import FullCalendar from '@fullcalendar/react';
-import{ DateSelectArg, EventContentArg } from '@fullcalendar/core';
+import { DateSelectArg } from "@fullcalendar/core";
 import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
-interface Reservation {
-  id: string;
-  date: string;
-  bentoType: string;
-}
-
-const ReserveCalendar: React.FC = () => {
-  const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [bentoType, setBentoType] = useState<string>("A"); // デフォルトの弁当タイプを設定
+export default function ReserveCalendar() {
   const { data: session } = useSession();
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+  const [bentoType, setBentoType] = useState('A');
 
-  useEffect(() => {
-    fetchReservations();
-  }, []);
-
-  const fetchReservations = async () => {
-    try {
-      const res = await fetch("/api/reservation", { method: "GET" });
-      const data = await res.json();
-
-      if (Array.isArray(data)) {
-        setReservations(data);
-      } else {
-        console.error("予約データが配列ではありません:", data);
-        setReservations([]); // デフォルトで空の配列を設定
-      }
-    } catch (error) {
-      console.error("予約データの取得中にエラーが発生しました:", error);
-      setReservations([]); // エラー時に空の配列を設定
-    }
-  };
-
+  // 日付選択・解除の処理
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const selectedDate = selectInfo.startStr;
-    if (!selectedDates.includes(selectedDate)) {
-      setSelectedDates([...selectedDates, selectedDate]);
-    } else {
-      setSelectedDates(selectedDates.filter((date) => date !== selectedDate));
-    }
+    setSelectedDates((prevDates) => {
+      if (prevDates.includes(selectedDate)) {
+        // 選択済みの日付を再度クリックした場合、解除
+        return prevDates.filter(date => date !== selectedDate);
+      } else {
+        // 新たに選択された日付を追加
+        return [...prevDates, selectedDate];
+      }
+    });
   };
 
-  const handleReservationSubmit = async () => {
-    if (!session) {
-      alert("認証が必要です");
+  // 予約の登録
+  const handleReservation = async () => {
+    if (!selectedDates.length) {
+      alert('日付を選択してください。');
       return;
     }
+    if (!session) return;
 
-    if (selectedDates.length === 0) {
-      alert("予約する日付を選択してください。");
-      return;
-    }
+    const reservations = selectedDates.map(date => ({
+      date,
+      bentoType,
+    }));
 
-    for (const date of selectedDates) {
-      await fetch("/api/reservation", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.accessToken || session.user.id}`,
-        },
-        body: JSON.stringify({
-          date,
-          bentoType,
-          userId: session.user.id, // 認証情報から取得
-        }),
+    try {
+      await axios.post('/api/reservation', {
+        userId: session.user.id,
+        reservations,
       });
+      alert('予約が完了しました！');
+      setSelectedDates([]);  // 選択リセット
+    } catch (error) {
+      console.error(error);
+      alert('予約に失敗しました。');
     }
-    alert("予約が完了しました！");
-    setSelectedDates([]);
-    fetchReservations();
   };
 
-  const renderEventContent = (eventContent: EventContentArg) => (
-    <span style={{ color: "red", fontWeight: "bold" }}>予約済み</span>
-  );
+  // 選択された日付をカレンダーに表示するためのイベントデータ
+  const events = selectedDates.map(date => ({
+    title: bentoType,
+    start: date,
+    backgroundColor: '#ff9f89',  // 選択時の背景色
+    borderColor: '#ff6f61',      // 選択時のボーダー色
+  }));
 
   return (
     <div>
+      <h1>弁当予約カレンダー</h1>
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         selectable={true}
         select={handleDateSelect}
-        events={Array.isArray(reservations) ? reservations.map((res) => ({
-          title: "予約済み",
-          start: res.date,
-          end: res.date,
-          display: "background",
-        })) : []}
-        eventContent={renderEventContent}
-        selectMirror={true}
+        events={events}  // 選択済み日付を反映するイベント
       />
-      <div style={{ marginTop: "1rem" }}>
-        <label>弁当タイプを選択:</label>
+      <div>
+        <label>弁当の種類を選択：</label>
         <select value={bentoType} onChange={(e) => setBentoType(e.target.value)}>
-          <option value="A">弁当A</option>
-          <option value="B">弁当B</option>
-          <option value="C">弁当C</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
         </select>
       </div>
-      <button onClick={handleReservationSubmit} style={{ marginTop: "1rem" }}>
-        予約を確定する
-      </button>
+      <button onClick={handleReservation}>予約を確定する</button>
     </div>
   );
-};
-
-export default ReserveCalendar;
+}

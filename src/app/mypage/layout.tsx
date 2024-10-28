@@ -1,9 +1,9 @@
 // app/mypage/layout.tsx
 "use client";
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import Sidebar from "@/app/components/Sidebar";
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 
 const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
