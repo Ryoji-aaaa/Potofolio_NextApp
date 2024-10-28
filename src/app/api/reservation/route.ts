@@ -1,6 +1,33 @@
 import { NextResponse } from 'next/server';
 import Reservation from '@/lib/ReservationModels';
 import connectDB from '@/lib/mongodb';
+
+// GETメソッド: 特定のユーザーの予約データを取得
+export async function GET(request) {
+  await connectDB();
+
+  const userId = request.nextUrl.searchParams.get("userId");
+
+  if (!userId) {
+    return NextResponse.json({ message: 'ユーザーIDが指定されていません。' }, { status: 400 });
+  }
+
+  try {
+    // 指定のuserIdの予約データを取得
+    const userReservation = await Reservation.findOne({ userId }).exec();
+
+    if (!userReservation) {
+      return NextResponse.json({ reservations: [] }, { status: 200 });
+    }
+
+    // データを返す
+    return NextResponse.json({ reservations: userReservation.reservations }, { status: 200 });
+  } catch (error) {
+    console.error("予約データの取得に失敗しました", error);
+    return NextResponse.json({ message: 'サーバーエラーです。' }, { status: 500 });
+  }
+}
+
 // POSTメソッド: 予約データの登録
 export async function POST(request) {
   await connectDB();
