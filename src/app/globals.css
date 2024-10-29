@@ -164,3 +164,15 @@ body {
     line-height: inherit;
     vertical-align: baseline;
   }
+
+  .calender-event{
+    display: "flex";
+        align-items: "center";
+        justify-content: "center";
+        background-color: "#87cefa"; 
+        border-Color: "#4682b4";
+        height: "100%";
+        width: "100%";
+        border-Style: "solid";
+        border-Width: "1px";
+  }

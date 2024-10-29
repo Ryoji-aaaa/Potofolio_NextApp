@@ -18,18 +18,10 @@ export default function MyPage() {
     return <p>Loading...</p>;
   }
 
-  if (!session) {
-    return (
-      <div>
-        <p>Sign out</p>
-      </div>
-    );
-  }
-
   return (
     <div>
       <h1>Settings </h1>
-      <a>(UserName: {session.user.username})</a>
+      <a>(UserName: {session!.user.username})</a>
       <p>
         パスワードの変更
         <span
