@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home, LayoutDashboard, Settings, User } from "lucide-react";
+import { Home,ClipboardCheck,ClipboardX, Settings, User } from "lucide-react";
 
 
 
@@ -23,8 +23,15 @@ const Sidebar = () => {
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
           href="/mypage/reservation"
         >
-          <LayoutDashboard className="mr-3 h-5 w-5" />
-          Reservation
+          <ClipboardCheck className="mr-3 h-5 w-5" />
+          予約の追加
+        </Link>
+        <Link
+          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+          href="/mypage/reservation/delete-reservation"
+        >
+          <ClipboardX className="mr-3 h-5 w-5" />
+          予約の削除
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"

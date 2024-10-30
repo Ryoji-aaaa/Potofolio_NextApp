@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
 import Reservation from '@/lib/ReservationModels';
 import connectDB from '@/lib/mongodb';
+import { NextRequest } from 'next/server';
 
 // GETメソッド: 特定のユーザーの予約データを取得
-export async function GET(request) {
+export async function GET(request: NextRequest) {
   await connectDB();
 
   const userId = request.nextUrl.searchParams.get("userId");
@@ -27,9 +28,8 @@ export async function GET(request) {
     return NextResponse.json({ message: 'サーバーエラーです。' }, { status: 500 });
   }
 }
-
 // POSTメソッド: 予約データの登録
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   await connectDB();
 
   const { userId, reservations } = await request.json();
