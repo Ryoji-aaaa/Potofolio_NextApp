@@ -31,14 +31,14 @@ const AdminSidebar = () => {
           href="/adminpage/change-price"
         >
           <Salad className="mr-3 h-5 w-5" />
-          弁当の金額変更
+          弁当の金額
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="#"
+          href="/adminpage/user-manager"
         >
           <User className="mr-3 h-5 w-5" />
-          Profile
+          利用者一覧
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
