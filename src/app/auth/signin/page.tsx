@@ -14,9 +14,9 @@ export default function SignInPage() {
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
     setInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    // console.log({ info });
     if (!info.email || !info.password) {
       setError("Must provide all Credentials");
       return;
@@ -29,7 +29,13 @@ export default function SignInPage() {
         redirect: false,
       });
       if (res?.ok) {
-        router.replace("/mypage");
+        const sessionRes = await fetch("/api/auth/session");
+        const session = await sessionRes.json();
+        if (session.user.admin) {
+          router.replace("/adminpage");
+        } else {
+          router.replace("/mypage");
+        }
       } else {
         setError("Sign in failed");
       }
