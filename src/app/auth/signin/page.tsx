@@ -10,7 +10,6 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const router = useRouter();
-
   const handleInput = async (e: ChangeEvent<HTMLInputElement>) => {
     setInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };

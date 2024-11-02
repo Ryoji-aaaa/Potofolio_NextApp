@@ -1,9 +1,9 @@
 // app/mypage/layout.tsx
 "use client";
 import React, { useEffect } from "react";
-import Sidebar from "@/app/components/Sidebar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import AdminSidebar from "../components/AdminSidebar";
 
 const AdminPageLayout = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
@@ -13,7 +13,6 @@ const AdminPageLayout = ({ children }: { children: React.ReactNode }) => {
       return; // Wait until the session is fully loaded
     }
     if (status === "authenticated" && session?.user.admin) {
-      console.log(session);
       return;
     } else if (status === "authenticated" && !session?.user.admin) {
       router.push("/mypage");
@@ -47,7 +46,7 @@ const AdminPageLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-      <Sidebar />
+      <AdminSidebar />
       {session.user.admin ? (
         <button onClick={() => router.push("/adminpage")}>管理者画面へ</button>
       ) : (
