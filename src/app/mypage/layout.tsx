@@ -41,7 +41,11 @@ const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
       <Sidebar />
-
+      {session.user.admin ? (
+        <button onClick={() => router.push("/adminpage")}>管理者画面へ</button>
+      ) : (
+        ""
+      )}
       <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
     </div>
   );
