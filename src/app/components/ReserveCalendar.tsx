@@ -152,6 +152,8 @@ export default function ReserveCalendar() {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         selectable={true}
+        selectMirror={true} // 選択範囲のミラー表示
+        longPressDelay={500} // 長押しの遅延時間（ミリ秒）
         select={handleDateSelect}
         events={events} // 既存の予約と選択済み日付を反映
         eventContent={renderEventContent}
