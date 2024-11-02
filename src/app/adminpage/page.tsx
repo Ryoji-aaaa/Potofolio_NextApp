@@ -5,7 +5,7 @@ import { LogOut } from "lucide-react";
 
 export default function MyPage() {
   const { data: session } = useSession();
-
+  
   return (
     <div>
       <h1>Admin Page</h1>
