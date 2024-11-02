@@ -5,8 +5,17 @@ export default withAuth({
   pages: {
     signIn: "/auth/signin", // セッションがない場合にリダイレクトするページ
   },
+  callbacks: {
+    authorized: ({ token }) => {
+      // 管理者専用ページへのアクセスを制限
+      if (token && token.admin===true) {
+        return true;
+      }
+      return false;
+    },
+  },
 });
 
 export const config = {
-  matcher: ["/", "/mypage", "/add", "/profile", "/update/:path*"], // ミドルウェアを適用するパス
+  matcher: ["/:path*", "/mypage/:path*", "/adminpage/:path*"], // ミドルウェアを適用するパス
 };

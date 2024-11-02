@@ -6,7 +6,6 @@ import UserModel from "@/lib/UserModels";
 export async function POST(request: Request) {
   await connectDB();
   const { username, email, password } = await request.json();
-  // console.log({ username, email, password });
   const exists = await UserModel.exists({ $or: [{ email }, { username }] });
   if (exists) {
     return NextResponse.json(
@@ -15,6 +14,6 @@ export async function POST(request: Request) {
     );
   }
   const hashedPassword = await hash(password, 12);
-  await UserModel.create({ username, email, password: hashedPassword });
+  await UserModel.create({ username, email, password: hashedPassword ,admin : false});
   return NextResponse.json({ message: "User created" }, { status: 201 });
 }

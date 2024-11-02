@@ -1,21 +1,9 @@
 // app/api/auth/[...nextauth]/route.ts
-import NextAuth, { NextAuthOptions, User as NextAuthUser } from "next-auth";
+import NextAuth, { Credentials,NextAuthOptions,User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "@/lib/mongodb";
 import { compare } from "bcryptjs";
 import UserModel from "@/lib/UserModels";
-
-interface Credentials {
-  username: string;
-  email: string;
-  password: string;
-}
-
-interface User extends NextAuthUser {
-  id: string;
-  email: string;
-  username: string;
-}
 
 
 const authorize = async (credentials: Credentials | undefined): Promise<User | null> => {
@@ -39,7 +27,8 @@ const authorize = async (credentials: Credentials | undefined): Promise<User | n
   }
 
   console.log("User authenticated successfully");
-  return { id: user._id.toString(), email: user.email, username: user.username };
+  console.log(user);
+  return { id: user._id.toString(), email: user.email, username: user.username , admin: user.admin };
 };
 
 const authOptions :NextAuthOptions = {
@@ -49,8 +38,7 @@ const authOptions :NextAuthOptions = {
       credentials: {
         email: {
           label: "Email",
-          type: "email",
-          placeholder: "your-email@example.com",
+          type: "email"
         },
         password: { label: "Password", type: "password" },
         username: { label: "Username", type: "text" },
@@ -68,7 +56,8 @@ const authOptions :NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
-        token.username = (user as User).username;
+        token.username = user.username;
+        token.admin = user.admin;
       }
       return token;
     },
@@ -78,6 +67,7 @@ const authOptions :NextAuthOptions = {
           id: token.id ? String(token.id) : "",          
           email: token.email || "",      
           username: token.username ? String(token.username) : "" ,
+          admin : token.admin ? Boolean(token.admin) : false
         };
       }
       return session;

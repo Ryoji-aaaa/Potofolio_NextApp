@@ -35,7 +35,7 @@ export default function ReserveCalendar() {
       if (session) {
         try {
           const response = await fetch(
-            `/api/reservation?userId=${session.user.id}`
+            `/api/reservation?userId=${session.user!.id}`
           );
           const data = await response.json();
           setExistingReservations(data.reservations);
@@ -99,7 +99,7 @@ export default function ReserveCalendar() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: session.user.id,
+          userId: session.user!.id,
           reservations,
         }),
       });
@@ -111,7 +111,7 @@ export default function ReserveCalendar() {
       alert("予約が完了しました！");
       setSelectedDates([]);
       const fetchResponse = await fetch(
-        `/api/reservation?userId=${session.user.id}`
+        `/api/reservation?userId=${session.user!.id}`
       );
       const data = await fetchResponse.json();
       setExistingReservations(data.reservations);
@@ -147,13 +147,14 @@ export default function ReserveCalendar() {
   return (
     <div>
       <h1>予約カレンダー</h1>
+      <p>スマホで操作する場合は長押しで選択してください</p>
       <FullCalendar
         locale="ja"
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         selectable={true}
-        selectMirror={true} // 選択範囲のミラー表示
-        longPressDelay={500} // 長押しの遅延時間（ミリ秒）
+        selectMirror={true}
+        longPressDelay={100} // 長押しの遅延時間（ミリ秒）
         select={handleDateSelect}
         events={events} // 既存の予約と選択済み日付を反映
         eventContent={renderEventContent}
