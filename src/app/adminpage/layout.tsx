@@ -46,7 +46,7 @@ const AdminPageLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-      <AdminSidebar />
+      <AdminSidebar/>
       {session.user.admin ? (
         <button onClick={() => router.push("/adminpage")}>管理者画面へ</button>
       ) : (
