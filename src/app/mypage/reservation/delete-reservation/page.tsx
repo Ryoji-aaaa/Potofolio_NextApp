@@ -7,8 +7,6 @@ export default function DeleteReservationPage() {
   const { data: session } = useSession();
   return (
     <div>
-      {/* <h1>予約削除ページ</h1> */}
-      <p>Name: {session!.user.username}</p>
       {/* 動作未確認なので非表示中 */}
       {/* <DeleteReserveCalendar /> */}
       <DeleteReserveList />
