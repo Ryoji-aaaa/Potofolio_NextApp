@@ -19,7 +19,7 @@ const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
   if (status === "loading") {
     return <div className="index-loading">Loading</div>;
   }
-  if (!session) {
+  if (!session && status === "unauthenticated") {
     return (
       <div>
         <h1>Session Error</h1>
@@ -40,12 +40,12 @@ const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-      <Sidebar />
-      {session.user.admin ? (
+      {session!.user.admin ? (
         <button onClick={() => router.push("/adminpage")}>管理者画面へ</button>
       ) : (
         ""
       )}
+      <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
     </div>
   );

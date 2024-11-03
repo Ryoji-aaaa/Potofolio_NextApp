@@ -1,4 +1,3 @@
-// app/mypage/page.tsx
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import { LogOut } from "lucide-react";

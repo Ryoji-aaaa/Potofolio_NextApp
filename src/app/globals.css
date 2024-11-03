@@ -71,6 +71,19 @@ body {
     width: 100%;
     padding: 0.75rem;
     margin-top: 1rem;
+    background-color: lightgreen;
+    border: none;
+    border-radius: 4px;
+    font: inherit;
+    font-weight: bold;
+    color: #46463a;
+    cursor: pointer;
+  }
+  button {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1rem;
     background-color: #f7e596;
     border: none;
     border-radius: 4px;

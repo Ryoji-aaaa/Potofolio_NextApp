@@ -3,7 +3,7 @@
 import { signOut, useSession } from "next-auth/react";
 import { LogOut } from "lucide-react";
 
-export default function MyPage() {
+export default function AdminPage() {
   const { data: session } = useSession();
   
   return (

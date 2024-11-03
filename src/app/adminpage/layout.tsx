@@ -25,7 +25,7 @@ const AdminPageLayout = ({ children }: { children: React.ReactNode }) => {
   if (status === "loading") {
     return <div className="index-loading">Loading</div>;
   }
-  if (!session) {
+  if (!session && status === "unauthenticated") {
     return (
       <div>
         <h1>Session Error</h1>
@@ -46,12 +46,12 @@ const AdminPageLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
-      <AdminSidebar/>
-      {session.user.admin ? (
+      {session!.user.admin ? (
         <button onClick={() => router.push("/mypage")}>ユーザー画面へ</button>
       ) : (
         ""
       )}
+      <AdminSidebar/>
       <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
     </div>
   );
