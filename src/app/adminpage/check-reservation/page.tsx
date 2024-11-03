@@ -45,6 +45,7 @@ function CheckReservation() {
         initialView="dayGridMonth"
         selectable={true}
         selectMirror={true}
+        longPressDelay={100} // 長押しの遅延時間（ミリ秒）
         select={handleDateSelect}
       />
       {selectedDate && (
