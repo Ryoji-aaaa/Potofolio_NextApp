@@ -127,21 +127,28 @@ export default function ReserveCalendar() {
     ...selectedDates.map((date) => ({
       title: bentoType,
       start: date,
-      backgroundColor: "#ff9f89",
-      borderColor: "#ff6f61",
+      backgroundColor: bentoType === 
+      "A" ? "#ff7f7f" : bentoType === "B" ? "#7fbfff" : "#7fff00",
+      borderColor: "black",
+      textColor: bentoType === "C" ? "hotpink" : "yellow",
     })),
     // 既存の予約データを反映
     ...existingReservations.map((reservation) => ({
       title: reservation.bentoType,
       start: reservation.date,
       display: "flex",
-      backgroundColor: "#87cefa", 
-      borderColor: "#4682b4", 
-      
+      backgroundColor: reservation.bentoType === "A" ? "#ff9999" : reservation.bentoType === "B" ? "#99ccff" : "#99ffcc",
+      borderColor: "gray",
+      textColor: "gray",
     })),
   ];
+
   const renderEventContent = (eventContent: EventContentArg) => (
-    <span>{eventContent.event.title}</span>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}>
+      <span style={{ color: eventContent.event.extendedProps.textColor }}>
+        {eventContent.event.title}
+      </span>
+    </div>
   );
 
   return (
@@ -150,6 +157,7 @@ export default function ReserveCalendar() {
       <p>スマホで操作する場合は長押しで選択してください</p>
       <FullCalendar
         locale="ja"
+        weekends={false}
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         selectable={true}
@@ -175,7 +183,12 @@ export default function ReserveCalendar() {
           {infoBox.message}
         </InfoBox>
       ) : null}
-      <button onClick={() => setSelectedDates([])}>選択をクリア</button>
+      <button
+        style={{backgroundColor: "#f79696",padding: "0.25rem",color:"white"}}
+        onClick={() => setSelectedDates([])}
+      >
+        選択をクリア
+      </button>
       <button onClick={handleReservation}>予約を確定する</button>
     </div>
   );

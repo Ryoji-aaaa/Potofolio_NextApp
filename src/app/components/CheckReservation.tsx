@@ -51,6 +51,7 @@ function CheckReservation() {
     <div>
       <FullCalendar
         locale="ja"
+        weekends={false}
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         selectable={true}

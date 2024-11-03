@@ -17,7 +17,7 @@ function UserManager() {
         const data = await response.json();
         setUsers(data.users);
       } catch (error) {
-        console.error("ユーザー一覧の取得に失敗しました", error);
+        console.error("ユーザーの取得に失敗しました", error);
       } finally {
         setLoading(false);
       }
@@ -32,7 +32,7 @@ function UserManager() {
 
   return (
     <div>
-      <h1>ユーザー一覧</h1>
+      <h1>利用者登録情報</h1>
       <ul>
         {users.map((user, index) => (
           <li key={index}>
