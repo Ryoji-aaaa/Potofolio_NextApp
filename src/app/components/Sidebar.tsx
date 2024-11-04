@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home,ClipboardCheck,ClipboardX, Settings, User } from "lucide-react";
+import { Home, Settings, ScanBarcode, CalendarDays, CalendarSearch } from "lucide-react";
 
 
 
@@ -17,35 +17,35 @@ const Sidebar = () => {
           href="/mypage"
         >
           <Home className="mr-3 h-5 w-5" />
-          Home
+          ホーム
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
           href="/mypage/reservation"
         >
-          <ClipboardCheck className="mr-3 h-5 w-5" />
-          予約の追加
+          <CalendarDays className="mr-3 h-5 w-5" />
+          追加
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
           href="/mypage/reservation/delete-reservation"
         >
-          <ClipboardX className="mr-3 h-5 w-5" />
-          予約の削除
+          <CalendarSearch className="mr-3 h-5 w-5" />
+          確認・削除
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="#"
+          href="/mypage/barcode"
         >
-          <User className="mr-3 h-5 w-5" />
-          Profile
+          <ScanBarcode className="mr-3 h-5 w-5" />
+          表示
         </Link>
         <Link
           className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
           href="/mypage/settings"
         >
           <Settings className="mr-3 h-5 w-5" />
-          Settings
+          設定
         </Link>
       </nav>
     </aside>

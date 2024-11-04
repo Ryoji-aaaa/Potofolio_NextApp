@@ -1,5 +1,6 @@
 // app/mypage/page.tsx
 "use client";
+import { LogOut } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -45,7 +46,7 @@ export default function MyPage() {
         </span>
       </p>
 
-      <button onClick={() => signOut()}>Sign Out</button>
+      <button onClick={() => signOut()}><LogOut />Sign Out</button>
     </div>
   );
 }
