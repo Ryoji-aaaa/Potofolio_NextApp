@@ -42,8 +42,8 @@ const BarcodePage: React.FC = () => {
             <h1>受け取り</h1>
             <p>日付: {today}</p>
             {bentoType && email ? (
-                <div>
-                    <Barcode value={`${email}-${bentoType}`} />
+                <div className="barcode">
+                    <Barcode  value={`${email}-${bentoType}`} />
                     <p>Email: {email}</p>
                     <p>Bento Type: {bentoType}</p>
                 </div>

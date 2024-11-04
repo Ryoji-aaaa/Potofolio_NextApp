@@ -1,50 +1,49 @@
+import React, { useState } from "react";
 import Link from "next/link";
-import { Home, Settings, ScanBarcode, CalendarDays, CalendarSearch } from "lucide-react";
-
-
+import {
+  Home,
+  Settings,
+  ScanBarcode,
+  CalendarDays,
+  CalendarSearch,
+  Menu,
+  X,
+} from "lucide-react";
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-          Menu
-        </h1>
+    <aside className="sidebar">
+      <div className="menu-header">
+        <h1>Menu</h1>
+        <button className="menu-toggle" onClick={toggleMenu}>
+          {isOpen ? <X /> : <Menu />}
+        </button>
       </div>
-      <nav className="mt-4">
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/mypage"
-        >
-          <Home className="mr-3 h-5 w-5" />
+      <nav className={`menu ${isOpen ? "open" : ""}`}>
+        <Link href="/mypage">
+          <Home />
           ホーム
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/mypage/reservation"
-        >
-          <CalendarDays className="mr-3 h-5 w-5" />
+        <Link href="/mypage/reservation">
+          <CalendarDays />
           追加
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/mypage/reservation/delete-reservation"
-        >
-          <CalendarSearch className="mr-3 h-5 w-5" />
+        <Link href="/mypage/reservation/delete-reservation">
+          <CalendarSearch />
           確認・削除
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/mypage/barcode"
-        >
-          <ScanBarcode className="mr-3 h-5 w-5" />
+        <Link href="/mypage/barcode">
+          <ScanBarcode />
           表示
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/mypage/settings"
-        >
-          <Settings className="mr-3 h-5 w-5" />
+        <Link href="/mypage/settings">
+          <Settings />
           設定
         </Link>
       </nav>
