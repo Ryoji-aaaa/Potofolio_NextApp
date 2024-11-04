@@ -102,9 +102,9 @@ export default function DeleteReserveList() {
   };
 
   const currentYear = dayjs().year();
-  const currentMonth = dayjs().month() + 1; 
+  const currentMonth = dayjs().month() + 1;
   const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
-  const nextYear = currentYear + 1 ;
+  const nextYear = currentYear + 1;
   const afterNextMonth = nextMonth === 12 ? 1 : nextMonth + 1;
 
   return (
@@ -151,12 +151,14 @@ export default function DeleteReserveList() {
                 {dayjs(reservation.date).format("MM月DD日")} -{" "}
                 {reservation.bentoType}
               </span>
-              {!isDeletable(reservation.date) ? (
+              {dayjs(reservation.date).format("YYYY-MM-DD") ===
+                dayjs().format("YYYY-MM-DD") && (
+                <a href="/mypage/barcode">受け取り画面へ</a>
+              )}
+              {!isDeletable(reservation.date) && (
                 <span style={{ fontSize: "10px", color: "red" }}>
-                  予約取り消し前日までです
+                  予約取消は前日まで
                 </span>
-              ) : (
-                ""
               )}
             </button>
           </li>
