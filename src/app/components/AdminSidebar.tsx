@@ -1,51 +1,42 @@
+import React, { useState } from "react";
 import Link from "next/link";
-import { Home,ClipboardCheck,Salad, Settings, User } from "lucide-react";
-
-
+import { Home, ClipboardCheck, Salad, Settings, User, Menu, X } from "lucide-react";
 
 const AdminSidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-          Admin Menu
-        </h1>
+    <aside className="sidebar">
+      <div className="menu-header">
+        <h1>AdminMenu</h1>
+        <button className="menu-toggle" onClick={toggleMenu}>
+          {isOpen ? <X /> : <Menu />}
+        </button>
       </div>
-      <nav className="mt-4">
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/adminpage"
-        >
-          <Home className="mr-3 h-5 w-5" />
-          Home
+      <nav className={`menu ${isOpen ? "open" : ""}`}>
+        <Link href="/adminpage">
+          <Home />
+          ホーム
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/adminpage/check-reservation"
-        >
-          <ClipboardCheck className="mr-3 h-5 w-5" />
-          予約の確認
+        <Link href="/adminpage/check-reservation">
+          <ClipboardCheck />
+          予約照会
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/adminpage/change-price"
-        >
-          <Salad className="mr-3 h-5 w-5" />
-          弁当の金額
+        <Link href="/adminpage/change-price">
+          <Salad />
+          金額変更
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="/adminpage/user-manager"
-        >
-          <User className="mr-3 h-5 w-5" />
-          利用者一覧
+        <Link href="/adminpage/user-manager">
+          <User />
+          一覧
         </Link>
-        <Link
-          className="flex items-center px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-          href="#"
-        >
-          <Settings className="mr-3 h-5 w-5" />
-          Settings
+        <Link href="#">
+          <Settings />
+          設定
         </Link>
       </nav>
     </aside>
