@@ -1,8 +1,8 @@
 // src/app/payment-details/page.tsx
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 interface Reservation {
   date: string;
@@ -25,6 +25,9 @@ function PaymentDetailsPage() {
 
     try {
       const response = await fetch(`/api/payment-details?month=${selectedMonth}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch reservations");
+      }
       const data = await response.json();
       setReservations(data.reservations);
       setTotalPrice(data.totalPrice);
@@ -39,7 +42,7 @@ function PaymentDetailsPage() {
 
   return (
     <div>
-      <h1>お支払い明細</h1>
+      <h1>支払い詳細</h1>
       <p>
         支払方法の登録・変更は
         <span
@@ -47,19 +50,21 @@ function PaymentDetailsPage() {
           onClick={() => {
             router.push("/mypage/settings/card-registration");
           }}
-        >こちら</span></p>
+        >こちら</span>
+      </p>
       <label htmlFor="month">月を選択:</label>
       <input
         type="month"
         id="month"
         value={selectedMonth}
         onChange={handleMonthChange}
+        style={{ display: "block", margin: "10px 0" }}
       />
       <h2>合計金額: ¥{totalPrice.toLocaleString()}</h2>
       <ul>
         {reservations.map((reservation, index) => (
           <li key={index}>
-            {reservation.date}: {reservation.bentoType} - ¥{reservation.price}
+            {reservation.date}: {reservation.bentoType} - ¥{reservation.price.toLocaleString()}
           </li>
         ))}
       </ul>
