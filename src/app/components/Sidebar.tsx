@@ -8,6 +8,7 @@ import {
   CalendarSearch,
   Menu,
   X,
+  PanelTopOpen,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -29,6 +30,10 @@ const Sidebar = () => {
         <Link href="/mypage">
           <Home />
           ホーム
+        </Link>
+        <Link href="/mypage/payment-details">
+          <PanelTopOpen />
+          明細
         </Link>
         <Link href="/mypage/reservation">
           <CalendarDays />
