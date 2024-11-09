@@ -8,8 +8,14 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const month = searchParams.get("month");
+  const userId = searchParams.get("userId");
+
   if (!month) {
     return NextResponse.json({ message: "Month is required" }, { status: 400 });
+  }
+
+  if (!userId) {
+    return NextResponse.json({ message: "User ID is required" }, { status: 400 });
   }
 
   const startDate = new Date(`${month}-01`);
@@ -18,6 +24,7 @@ export async function GET(req: NextRequest) {
   try {
     const reservations = await ReservationModel.find({
       "reservations.date": { $gte: startDate, $lte: endDate },
+      userId: userId,
     }).populate("userId");
 
     const bentoPrices = await BentoPriceModel.find({});
@@ -30,17 +37,17 @@ export async function GET(req: NextRequest) {
     let totalPrice = 0;
 
     reservations.forEach((reservation) => {
-    reservation.reservations.forEach((bento: { date: Date; bentoType: string }) => {
-      if (bento.date >= startDate && bento.date <= endDate) {
-        const price: number = priceMap[bento.bentoType];
-        reservationDetails.push({
-        date: bento.date.toISOString().split("T")[0],
-        bentoType: bento.bentoType,
-        price,
-        });
-        totalPrice += price;
-      }
-    });
+      reservation.reservations.forEach((bento: { date: Date; bentoType: string }) => {
+        if (bento.date >= startDate && bento.date <= endDate) {
+          const price: number = priceMap[bento.bentoType];
+          reservationDetails.push({
+            date: bento.date.toISOString().split("T")[0],
+            bentoType: bento.bentoType,
+            price,
+          });
+          totalPrice += price;
+        }
+      });
     });
 
     return NextResponse.json({ reservations: reservationDetails, totalPrice });

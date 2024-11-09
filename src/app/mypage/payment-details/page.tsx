@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface Reservation {
   date: string;
@@ -12,6 +13,7 @@ interface Reservation {
 
 function PaymentDetailsPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [selectedMonth, setSelectedMonth] = useState("");
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -21,20 +23,23 @@ function PaymentDetailsPage() {
   };
 
   const fetchReservations = useCallback(async () => {
-    if (!selectedMonth) return;
+    if (!selectedMonth || !session) return;
 
     try {
-      const response = await fetch(`/api/payment-details?month=${selectedMonth}`);
+      const response = await fetch(`/api/payment-details?month=${selectedMonth}&userId=${session.user.id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch reservations");
       }
       const data = await response.json();
-      setReservations(data.reservations);
+      const sortedReservations = data.reservations.sort(
+        (a: Reservation, b: Reservation) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      );
+      setReservations(sortedReservations);
       setTotalPrice(data.totalPrice);
     } catch (error) {
       console.error("Failed to fetch reservations", error);
     }
-  }, [selectedMonth]);
+  }, [selectedMonth, session]);
 
   useEffect(() => {
     fetchReservations();
@@ -58,7 +63,7 @@ function PaymentDetailsPage() {
         id="month"
         value={selectedMonth}
         onChange={handleMonthChange}
-        style={{ display: "block", margin: "10px 0" }}
+        // style={{ display: "block", margin: "10px 0" }}
       />
       <h2>合計金額: ¥{totalPrice.toLocaleString()}</h2>
       <ul>
@@ -67,6 +72,7 @@ function PaymentDetailsPage() {
             {reservation.date}: {reservation.bentoType} - ¥{reservation.price.toLocaleString()}
           </li>
         ))}
+        {selectedMonth ==="" ? "月を選択してください": reservations.length === 0 ? <li>当月に支払いはありません</li> : ""}
       </ul>
     </div>
   );
