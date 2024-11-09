@@ -19,7 +19,8 @@ export default function DeleteReserveList() {
     []
   );
   const [year, setYear] = useState<number>(dayjs().year());
-  const [month, setMonth] = useState<number>(dayjs().month() + 1); // dayjsのmonthは0始まり
+  const [month, setMonth] = useState<number>(dayjs().month() + 1);
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
 
   useEffect(() => {
     // 過去の予約を取得
@@ -86,6 +87,13 @@ export default function DeleteReserveList() {
     });
   };
 
+  const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const [year, month] = e.target.value.split("-");
+    setYear(Number(year));
+    setMonth(Number(month));
+    setSelectedMonth(e.target.value);
+  };
+
   const filteredReservations = existingReservations
     .filter((reservation) => {
       const reservationDate = dayjs(reservation.date);
@@ -101,37 +109,18 @@ export default function DeleteReserveList() {
     return reservationDate.isAfter(today.add(1, "day"));
   };
 
-  const currentYear = dayjs().year();
-  const currentMonth = dayjs().month() + 1;
-  const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
-  const nextYear = currentYear + 1;
-  const afterNextMonth = nextMonth === 12 ? 1 : nextMonth + 1;
-
   return (
     <div>
       <h1>予約の削除</h1>
       <div>
         {filteredReservations.length === 0 && <p>予約がありません</p>}
         <label>
-          年:
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-          >
-            <option value={currentYear}>{currentYear}</option>
-            <option value={nextYear}>{nextYear}</option>
-          </select>
-        </label>
-        <label>
-          月:
-          <select
-            value={month}
-            onChange={(e) => setMonth(Number(e.target.value))}
-          >
-            <option value={currentMonth}>{currentMonth}</option>
-            <option value={nextMonth}>{nextMonth}</option>
-            <option value={afterNextMonth}>{afterNextMonth}</option>
-          </select>
+          月を選択:
+          <input
+            type="month"
+            value={selectedMonth}
+            onChange={handleMonthChange}
+          />
         </label>
       </div>
       <ul>
