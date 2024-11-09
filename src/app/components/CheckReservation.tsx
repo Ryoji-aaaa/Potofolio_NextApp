@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import { DateSelectArg } from '@fullcalendar/core';
+import { useState } from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { DateSelectArg } from "@fullcalendar/core";
 interface ReservationData {
-    username: string;
-    email: string;
-    bentoType: string;
+  username: string;
+  email: string;
+  bentoType: string;
 }
 
 function CheckReservation() {
@@ -24,8 +24,8 @@ function CheckReservation() {
     try {
       const response = await fetch(`/api/reservation/check?date=${date}`);
       const data = await response.json();
-      if(data.reservations.length === 0) {
-        setReservations([]); 
+      if (data.reservations.length === 0) {
+        setReservations([]);
         setSummary({});
         setNullinfo("予約はありません");
         return;
@@ -34,17 +34,19 @@ function CheckReservation() {
       setReservations(data.reservations);
 
       // 集計
-      const temp_summary = data.reservations.reduce((acc: { [key: string]: number }, reservation: ReservationData) => {
-        acc[reservation.bentoType] = (acc[reservation.bentoType] || 0) + 1;
-        return acc;
-      }, {});
+      const temp_summary = data.reservations.reduce(
+        (acc: { [key: string]: number }, reservation: ReservationData) => {
+          acc[reservation.bentoType] = (acc[reservation.bentoType] || 0) + 1;
+          return acc;
+        },
+        {}
+      );
       setSummary(temp_summary);
       setNullinfo("");
     } catch (error) {
       console.error("予約データの取得に失敗しました", error);
     }
   };
-  
 
   return (
     <div>
@@ -60,16 +62,7 @@ function CheckReservation() {
       />
       {selectedDate && (
         <div>
-          <h2>{selectedDate}の予約情報</h2>
-          <ul>
-            {reservations!.map((reservation: ReservationData, index: number) => (
-              <li key={index}>
-                <p>{reservation.username} </p>
-                <p>({reservation.email}) <span>{reservation.bentoType}</span></p>
-              </li>
-            ))}
-          </ul>
-          <h3>集計</h3>
+          <h2>集計</h2>
           {nullinfo && <p>{nullinfo}</p>}
           <ul>
             {Object.entries(summary).map(([bentoType, count]) => (
@@ -77,6 +70,19 @@ function CheckReservation() {
                 {bentoType}: {count}個
               </li>
             ))}
+          </ul>
+          <h3>{selectedDate}の予約情報</h3>
+          <ul>
+            {reservations!.map(
+              (reservation: ReservationData, index: number) => (
+                <li key={index} style={{ marginRight: "auto" }}>
+                  <p>
+                    <span>[ {reservation.bentoType} ]--</span>
+                    mail : {reservation.email}
+                  </p>
+                </li>
+              )
+            )}
           </ul>
         </div>
       )}
