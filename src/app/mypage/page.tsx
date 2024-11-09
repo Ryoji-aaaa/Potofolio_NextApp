@@ -21,6 +21,7 @@ export default function MyPage() {
           }}
         >こちら</span>
       </p>
+      <p>--カレンダー上をクリックすると選択できます</p>
       <p>
         2. 予約を確認・削除する
         <span
@@ -30,6 +31,7 @@ export default function MyPage() {
           }}
         >こちら</span>
       </p>
+      <p>--リストをクリックすると選択できます。</p>
       <p>
         3. 受け取り時にバーコードを表示する
         <span
@@ -38,6 +40,7 @@ export default function MyPage() {
             router.push("/mypage/barcode");
           }}
         >こちら</span></p>
+      <p>--今日予約をしていればバーコードが表示されます。</p>
       <button onClick={() => signOut()}>
         <LogOut /> Sign Out
       </button>
